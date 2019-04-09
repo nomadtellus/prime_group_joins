@@ -26,5 +26,27 @@ JOIN "customers" on "addresses"."customer_id" = "customers"."id"
 GROUP BY "customers"."id";
 
 --How many customers do we have?
+SELECT count(*) FROM "customers";
+
 --How many products do we carry?
+SELECT count(*) FROM "products";
+
 --What is the total available on-hand quantity of diet pepsi?
+SELECT SUM("on_hand") FROM "warehouse_product"
+WHERE "warehouse_product"."product_id" = 6;
+
+-- 9. How much was the total cost for each order?
+SELECT "orders"."id", SUM("line_items"."quantity" * "products"."unit_price") AS "order_total" FROM "orders"
+JOIN "line_items" ON "orders"."id" = "line_items"."order_id"
+JOIN "products" ON "line_items"."product_id" = "products"."id"
+GROUP BY "orders"."id";
+
+10. How much has each customer spent in total?
+SELECT "customers"."id", SUM("line_items"."quantity" * "products"."unit_price") AS "order_total" FROM "orders"
+JOIN "line_items" ON "orders"."id" = "line_items"."order_id"
+JOIN "products" ON "line_items"."product_id" = "products"."id"
+JOIN "addresses" ON "orders"."address_id" = "addresses"."id"
+JOIN "customers" on "addresses"."customer_id" = "customers"."id"
+GROUP BY "customers"."id";
+
+11. How much has each customer spent in total? Customers who have spent $0 should still show up in the table. It should say 0, not NULL (research coalesce).
